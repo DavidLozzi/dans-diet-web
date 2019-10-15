@@ -18,8 +18,8 @@ const useStyles = makeStyles((theme) => ({
   },
   copyright: {
     position: 'fixed',
-    bottom: theme.spacing.unit * 2,
-    left: theme.spacing.unit * 3
+    bottom: theme.spacing(2),
+    left: theme.spacing(3)
   }
 })
 );

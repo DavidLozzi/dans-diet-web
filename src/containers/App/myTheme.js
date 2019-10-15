@@ -7,6 +7,11 @@ const myTheme = createMuiTheme({
         background: '#ff0000'
       }
     },
+    MuiContainer: {
+      root: {
+        margin: '10px'
+      }
+    },
     MuiTextField: {
       root: {
         marginTop: '1rem'

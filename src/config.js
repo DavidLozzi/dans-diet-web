@@ -6,6 +6,7 @@ const CONFIG = {
   UI_URL: {
     HOME: '/',
     LANDING: '/landing',
+    MYDIET: '/mydiet',
     ERROR: (code) => `/error/${code}`
   },
   DISPLAY_TEXT: {
