@@ -66,7 +66,8 @@
     "operator-linebreak": [
       "error",
       "after"
-    ]
+    ],
+    "react/jsx-one-expression-per-line": 0
   },
   "globals": {
     "_satellite": true

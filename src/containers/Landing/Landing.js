@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Grid, makeStyles, Typography, Paper } from '@material-ui/core';
+import { Grid, makeStyles, Typography, Dialog, DialogContent } from '@material-ui/core';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 
 import { actions as myDietActions, selectors as myDietSelectors } from 'redux/api/myDiet/myDiet';
 import Layout from 'containers/Layout/Layout';
 import DietCard from 'components/DietCard/DietCard';
+import ManageDietDetail, { actions } from 'components/ManageDietDetail/ManageDietDetail';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,10 +27,15 @@ const useStyles = makeStyles((theme) => ({
 
 const Landing = ({ myDiets, myDietActions }) => {
   const classes = useStyles();
+  const [openDietDetails, setOpenDietDetails] = useState(false);
 
   useEffect(() => {
     myDietActions.loadDiets();
   }, []);
+
+  const toggleDietDetails = () => {
+    setOpenDietDetails(!openDietDetails);
+  };
 
   return (
     <Layout showTopNav showBottomNav>
@@ -46,7 +52,12 @@ const Landing = ({ myDiets, myDietActions }) => {
           </Typography>
         </Grid>
         <Grid item xs={2} style={{ textAlign: 'right' }}>
-          <AddCircleOutlineOutlinedIcon fontSize="large" />
+          <AddCircleOutlineOutlinedIcon fontSize="large" onClick={toggleDietDetails} />
+          <Dialog open={openDietDetails} onBackdropClick={toggleDietDetails}>
+            <DialogContent>
+              <ManageDietDetail action={actions.add} />
+            </DialogContent>
+          </Dialog>
         </Grid>
         {myDiets.map((diet) => (
           <Grid item key={diet.id} xs={12} sm={6}>
