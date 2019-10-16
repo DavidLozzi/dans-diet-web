@@ -4,7 +4,7 @@ import CONFIG from 'config';
 import { saveToLocalStorage, removeFromLocalStorage } from 'utils/localStorage/localStorage';
 
 export const loginUser = (email, password) => axios
-  .post(CONFIG.AUTH_URL,
+  .post(CONFIG.API_URL.AUTH,
     {
       email,
       password

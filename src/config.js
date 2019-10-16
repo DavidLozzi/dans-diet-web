@@ -1,7 +1,10 @@
 const CONFIG = {
   APP_NAME: 'Dan&apos;s Diet',
   SERVER_URL: 'http://localhost:3001/',
-  AUTH_URL: '/auth',
+  API_URL: {
+    AUTH: '/auth',
+    GETDIETS: '/diet'
+  },
   ACCESS_TOKEN: 'dansdiet-token-storage',
   UI_URL: {
     HOME: '/',

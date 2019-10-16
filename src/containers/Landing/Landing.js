@@ -1,7 +1,10 @@
-import React from 'react';
-import { Grid, makeStyles, Typography } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Grid, makeStyles, Typography, Paper } from '@material-ui/core';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 
+import { actions as myDietActions, selectors as myDietSelectors } from 'redux/api/myDiet/myDiet';
 import Layout from 'containers/Layout/Layout';
 import DietCard from 'components/DietCard/DietCard';
 
@@ -15,27 +18,18 @@ const useStyles = makeStyles((theme) => ({
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: 'translateZ(0)',
   },
+  noDiets: {
+    margin: theme.spacing(5)
+  }
 }));
 
-const Landing = () => {
+
+const Landing = ({ myDiets, myDietActions }) => {
   const classes = useStyles();
 
-  const myDiets = [
-    {
-      title: 'This Months Pain',
-      description: 'My doctor is making me do it...',
-      id: '1234abcd',
-      restricted: 104,
-      allowed: 2
-    },
-    {
-      title: 'Whole 30 Again',
-      description: 'Because I like to torture myself',
-      id: '1234abcde',
-      restricted: 55,
-      allowed: 30
-    }
-  ];
+  useEffect(() => {
+    myDietActions.loadDiets();
+  }, []);
 
   return (
     <Layout showTopNav showBottomNav>
@@ -59,9 +53,21 @@ const Landing = () => {
             <DietCard diet={diet} />
           </Grid>
         ))}
+        {
+          myDiets.length === 0 &&
+          <Typography variant="h5" className={classes.noDiets}>No diets yet, click the plus above to add your first one!</Typography>
+        }
       </Grid>
     </Layout>
   );
 };
 
-export default Landing;
+const mapStateToProps = (state) => ({
+  myDiets: myDietSelectors.getDiets(state)
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  myDietActions: bindActionCreators({ ...myDietActions }, dispatch)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Landing);
