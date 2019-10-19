@@ -20,7 +20,7 @@ const ManageDietDetail = ({ action, diet, onSave, onCancel }) => {
 
   const pressedEnter = (event) => {
     if (event.keyCode === 13) {
-      // loginUser();
+      // ();
     }
   };
 
@@ -80,7 +80,9 @@ const ManageDietDetail = ({ action, diet, onSave, onCancel }) => {
 
 ManageDietDetail.propTypes = {
   action: PropTypes.string.isRequired,
-  diet: PropTypes.shape()
+  diet: PropTypes.shape(),
+  onSave: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired
 };
 
 ManageDietDetail.defaultProps = {

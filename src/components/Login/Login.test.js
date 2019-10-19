@@ -1,22 +1,23 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 import { createShallow } from '@material-ui/core/test-utils';
-import { loginUser } from 'utils/loginUtil/loginUtil';
+import { loginUser } from 'utils/accountUtil/accountUtil';
 
 import Login from './Login';
 
-jest.mock('utils/loginUtil/loginUtil', () => {
+jest.mock('utils/accountUtil/accountUtil', () => ({
   loginUser: jest.fn()
-});
+}));
 
 afterEach(() => {
   jest.resetAllMocks();
 });
 
 let component;
-let shallow;
+// let shallow;
 beforeAll(() => {
-  shallow = createShallow();
-  component = shallow(<Login />);
+  // shallow = createShallow({ dive: true });
+  component = shallow(<Login />); //.dive();
 });
 
 describe('Login', () => {
@@ -25,9 +26,10 @@ describe('Login', () => {
   });
 
   it('logs in user', () => {
-    component.find('#login-email').text('david@lozzi.net');
-    component.find('#login-password').text('food');
-    component.find('Button').simulate('click');
+    console.log(component.debug());
+    component.find('WithStyles(ForwardRef(TextField))').at(0).getDOMNode().value = 'asd';
+    // component.find('#login-password').get(0).value = 'asd'; // ('food');
+    component.find('WithStyles(ForwardRef(Button))').simulate('click');
     expect(loginUser).toHaveBeenCalledWith({ email: 'david@lozzi.net', password: 'food' });
   });
 });
