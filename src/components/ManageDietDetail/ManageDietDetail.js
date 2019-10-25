@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import { actions as dietActions, name as dietName } from 'redux/api/myDiet/myDiet';
 import { Box, Typography, TextField, Button, makeStyles } from '@material-ui/core';
 
 export const actions = {
@@ -16,6 +18,8 @@ const useStyles = makeStyles((theme) => ({
 const ManageDietDetail = ({ action, diet, onSave, onCancel }) => {
   const [detailTitle, setDetailTitle] = useState(diet.title);
   const [detailDesc, setDetailDesc] = useState(diet.description);
+  const loading = useSelector((state) => state[dietName].loading);
+  const dispatch = useDispatch();
   const classes = useStyles();
 
   const pressedEnter = (event) => {
@@ -24,7 +28,8 @@ const ManageDietDetail = ({ action, diet, onSave, onCancel }) => {
     }
   };
 
-  const saveDiet = () => {
+  const saveDetails = () => {
+    dispatch(dietActions.saveDiet(detailTitle, detailDesc));
     if (onSave) { onSave(); }
   };
 
@@ -63,9 +68,9 @@ const ManageDietDetail = ({ action, diet, onSave, onCancel }) => {
         fullWidth
         variant="contained"
         className={classes.button}
-        onClick={saveDiet}
+        onClick={saveDetails}
       >
-        {action} Diet
+        {action} Diet {loading}
       </Button>
       <Button
         color="secondary"
@@ -81,12 +86,14 @@ const ManageDietDetail = ({ action, diet, onSave, onCancel }) => {
 ManageDietDetail.propTypes = {
   action: PropTypes.string.isRequired,
   diet: PropTypes.shape(),
-  onSave: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired
+  onSave: PropTypes.func,
+  onCancel: PropTypes.func
 };
 
 ManageDietDetail.defaultProps = {
-  diet: { title: '', description: '' }
+  diet: { title: '', description: '' },
+  onSave: () => {},
+  onCancel: () => {}
 };
 
 export default ManageDietDetail;

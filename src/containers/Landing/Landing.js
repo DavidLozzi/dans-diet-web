@@ -55,7 +55,11 @@ const Landing = ({ myDiets, myDietActions }) => {
           <AddCircleOutlineOutlinedIcon fontSize="large" onClick={toggleDietDetails} />
           <Dialog open={openDietDetails} onBackdropClick={toggleDietDetails}>
             <DialogContent>
-              <ManageDietDetail action={actions.add} />
+              <ManageDietDetail
+                action={actions.add}
+                onSave={() => { setOpenDietDetails(false); }}
+                onCancel={() => { setOpenDietDetails(false); }}
+              />
             </DialogContent>
           </Dialog>
         </Grid>
