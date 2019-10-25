@@ -3,7 +3,8 @@ const CONFIG = {
   SERVER_URL: 'http://localhost:3001/',
   API_URL: {
     AUTH: '/auth',
-    DIETS: '/diet'
+    DIETS: '/diet',
+    DIET: (dietId) => `/diet/${dietId}`
   },
   ACCESS_TOKEN: 'dansdiet-token-storage',
   UI_URL: {

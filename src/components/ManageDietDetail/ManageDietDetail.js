@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { actions as dietActions, name as dietName } from 'redux/api/myDiet/myDiet';
-import { Box, Typography, TextField, Button, makeStyles } from '@material-ui/core';
+import { Box, Typography, TextField, Button, makeStyles, Dialog, DialogContent, DialogActions, DialogContentText } from '@material-ui/core';
 
 export const actions = {
   add: 'Add',
@@ -15,12 +15,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ManageDietDetail = ({ action, diet, onSave, onCancel }) => {
+const ManageDietDetail = ({ action, diet, onSave, onCancel, onDelete }) => {
   const [detailTitle, setDetailTitle] = useState(diet.title);
   const [detailDesc, setDetailDesc] = useState(diet.description);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const loading = useSelector((state) => state[dietName].loading);
   const dispatch = useDispatch();
   const classes = useStyles();
+  const existingDiet = (diet._id);
 
   const pressedEnter = (event) => {
     if (event.keyCode === 13) {
@@ -28,15 +30,36 @@ const ManageDietDetail = ({ action, diet, onSave, onCancel }) => {
     }
   };
 
+  const clearForm = () => {
+    setDetailTitle('');
+    setDetailDesc('');
+  };
+
   const saveDetails = () => {
-    dispatch(dietActions.saveDiet(detailTitle, detailDesc));
+    if (existingDiet) {
+      const updatedDiet = { ...diet, title: detailTitle, description: detailDesc };
+      dispatch(dietActions.updateDiet(updatedDiet));
+    } else {
+      dispatch(dietActions.saveDiet(detailTitle, detailDesc));
+    }
+    clearForm();
     if (onSave) { onSave(); }
   };
 
   const cancel = () => {
-    setDetailTitle('');
-    setDetailDesc('');
+    clearForm();
     if (onCancel) { onCancel(); }
+  };
+
+  const toggleDeleteConfirm = () => {
+    setShowDeleteConfirm(!showDeleteConfirm);
+  };
+
+  const deleteDiet = () => {
+    clearForm();
+    dispatch(dietActions.deleteDiet(diet._id));
+    toggleDeleteConfirm();
+    if (onDelete) onDelete();
   };
 
   return (
@@ -79,6 +102,35 @@ const ManageDietDetail = ({ action, diet, onSave, onCancel }) => {
       >
         Cancel
       </Button>
+      {existingDiet &&
+        (
+          <>
+            <Button
+              color="secondary"
+              fullWidth
+              onClick={toggleDeleteConfirm}
+            >
+              Delete
+            </Button>
+            <Dialog open={showDeleteConfirm} onBackdropClick={toggleDeleteConfirm}>
+              <DialogContent>
+                <DialogContentText>
+                  Are you sure that you want to delete this diet? This diet along with all items
+                  within this diet will be permanently deleted. There is no undo option.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={toggleDeleteConfirm} color="primary">
+                  No
+                </Button>
+                <Button onClick={deleteDiet} color="secondary">
+                  Yes
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </>
+        )
+      }
     </Box>
   );
 };
@@ -87,13 +139,15 @@ ManageDietDetail.propTypes = {
   action: PropTypes.string.isRequired,
   diet: PropTypes.shape(),
   onSave: PropTypes.func,
-  onCancel: PropTypes.func
+  onCancel: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 
 ManageDietDetail.defaultProps = {
-  diet: { title: '', description: '' },
-  onSave: () => {},
-  onCancel: () => {}
+  diet: { title: '', description: '', _id: null },
+  onSave: () => { },
+  onCancel: () => { },
+  onDelete: () => { }
 };
 
 export default ManageDietDetail;

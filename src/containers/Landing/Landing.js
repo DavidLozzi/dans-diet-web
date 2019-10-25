@@ -26,8 +26,10 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Landing = ({ myDiets, myDietActions }) => {
-  const classes = useStyles();
   const [openDietDetails, setOpenDietDetails] = useState(false);
+  const [dietDetailsAction, setDietDetailsActions] = useState(actions.add);
+  const [selectedDiet, setSelectedDiet] = useState();
+  const classes = useStyles();
 
   useEffect(() => {
     myDietActions.loadDiets();
@@ -35,6 +37,13 @@ const Landing = ({ myDiets, myDietActions }) => {
 
   const toggleDietDetails = () => {
     setOpenDietDetails(!openDietDetails);
+    if (openDietDetails) setSelectedDiet();
+  };
+
+  const manageDietDetail = (diet) => {
+    setSelectedDiet(diet);
+    setDietDetailsActions(actions.edit);
+    setOpenDietDetails(true);
   };
 
   return (
@@ -56,16 +65,18 @@ const Landing = ({ myDiets, myDietActions }) => {
           <Dialog open={openDietDetails} onBackdropClick={toggleDietDetails}>
             <DialogContent>
               <ManageDietDetail
-                action={actions.add}
-                onSave={() => { setOpenDietDetails(false); }}
-                onCancel={() => { setOpenDietDetails(false); }}
+                diet={selectedDiet}
+                action={dietDetailsAction}
+                onSave={toggleDietDetails}
+                onCancel={toggleDietDetails}
+                onDelete={toggleDietDetails}
               />
             </DialogContent>
           </Dialog>
         </Grid>
         {myDiets.map((diet) => (
           <Grid item key={diet.id} xs={12} sm={6}>
-            <DietCard diet={diet} />
+            <DietCard diet={diet} onManage={manageDietDetail} />
           </Grid>
         ))}
         {

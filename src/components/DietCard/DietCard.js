@@ -29,8 +29,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const DietCard = ({ diet }) => {
+const DietCard = ({ diet, onManage }) => {
   const classes = useStyles();
+
+  const manageDiet = () => {
+    if (onManage) onManage(diet);
+  };
 
   return (
     <Card title={diet.title} className={classes.card}>
@@ -46,19 +50,19 @@ const DietCard = ({ diet }) => {
         <Button size="small" color="primary">
           Share
         </Button>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={manageDiet}>
           Manage
         </Button>
         <div className={classes.iconWrapper}>
           <Icon path={mdiBarleyOff} size={1} className={classes.icons} />
           <span className={classes.iconCount}>
             :
-            {diet.restricted}
+            {diet.restricted || 0}
           </span>
           <RestaurantOutlinedIcon color="primary" fontSize="small" className={classes.icons} />
           <span className={classes.iconCount}>
             :
-            {diet.allowed}
+            {diet.allowed || 0}
           </span>
         </div>
       </CardActions>
@@ -67,7 +71,12 @@ const DietCard = ({ diet }) => {
 };
 
 DietCard.propTypes = {
-  diet: PropTypes.shape().isRequired
+  diet: PropTypes.shape().isRequired,
+  onManage: PropTypes.func
+};
+
+DietCard.defaultProps = {
+  onManage: (diet) => { console.log(`Manage not defined. ${diet}`); }
 };
 
 export default DietCard;

@@ -7,6 +7,12 @@ export const API_MYDIET_FAILURE = 'API_MYDIET_FAILURE';
 export const API_MYDIET_SAVE_PENDING = 'API_MYDIET_SAVE_PENDING';
 export const API_MYDIET_SAVE_SUCCESS = 'API_MYDIET_SAVE_SUCCESS';
 export const API_MYDIET_SAVE_FAILED = 'API_MYDIET_SAVE_FAILED';
+export const API_MYDIET_UPDATE_PENDING = 'API_MYDIET_UPDATE_PENDING';
+export const API_MYDIET_UPDATE_SUCCESS = 'API_MYDIET_UPDATE_SUCCESS';
+export const API_MYDIET_UPDATE_FAILED = 'API_MYDIET_UPDATE_FAILED';
+export const API_MYDIET_DELETE_PENDING = 'API_MYDIET_DELETE_PENDING';
+export const API_MYDIET_DELETE_SUCCESS = 'API_MYDIET_DELETE_SUCCESS';
+export const API_MYDIET_DELETE_FAILED = 'API_MYDIET_DELETE_FAILED';
 
 export const name = 'mydiet';
 
@@ -53,6 +59,35 @@ export const actions = {
     } catch (error) {
       dispatch({ type: API_MYDIET_SAVE_FAILED, payload: error });
     }
+  },
+  updateDiet: (diet) => async (dispatch) => {
+    const newSource = axios.CancelToken.source();
+    sources.push(newSource);
+
+    dispatch({ type: API_MYDIET_UPDATE_PENDING });
+
+    try {
+      const response = await axios.put(CONFIG.API_URL.DIET(diet._id),
+        { ...diet },
+        { cancelToken: newSource.token });
+      dispatch({ type: API_MYDIET_UPDATE_SUCCESS, payload: response });
+    } catch (error) {
+      dispatch({ type: API_MYDIET_UPDATE_FAILED, payload: error });
+    }
+  },
+  deleteDiet: (dietId) => async (dispatch) => {
+    const newSource = axios.CancelToken.source();
+    sources.push(newSource);
+
+    dispatch({ type: API_MYDIET_DELETE_PENDING });
+
+    try {
+      const response = await axios.delete(CONFIG.API_URL.DIET(dietId),
+        { cancelToken: newSource.token });
+      dispatch({ type: API_MYDIET_DELETE_SUCCESS, payload: response });
+    } catch (error) {
+      dispatch({ type: API_MYDIET_DELETE_FAILED, payload: error });
+    }
   }
   // cancel: () => async (dispatch) => {
   //   //TODO
@@ -61,6 +96,8 @@ export const actions = {
 
 export function reducer(state = initialState, action) {
   switch (action.type) {
+    case API_MYDIET_DELETE_PENDING:
+    case API_MYDIET_UPDATE_PENDING:
     case API_MYDIET_SAVE_PENDING:
     case API_MYDIET_PENDING:
       return {
@@ -69,6 +106,8 @@ export function reducer(state = initialState, action) {
         error: false,
         errorMessage: ''
       };
+    case API_MYDIET_DELETE_FAILED:
+    case API_MYDIET_UPDATE_FAILED:
     case API_MYDIET_SAVE_FAILED:
     case API_MYDIET_FAILURE:
       return {
@@ -77,6 +116,8 @@ export function reducer(state = initialState, action) {
         error: true,
         errorMessage: action.payload
       };
+    case API_MYDIET_DELETE_SUCCESS:
+    case API_MYDIET_UPDATE_SUCCESS:
     case API_MYDIET_SAVE_SUCCESS:
     case API_MYDIET_SUCCESS:
       return {
