@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Grid, makeStyles, Typography, Dialog, DialogContent } from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 
-import { actions as myDietActions, selectors as myDietSelectors } from 'redux/api/myDiet/myDiet';
+import { actions as myDietActions, name as dietName } from 'redux/api/myDiet/myDiet';
 import Layout from 'containers/Layout/Layout';
 import DietCard from 'components/DietCard/DietCard';
-import ManageDietDetail, { actions } from 'components/ManageDietDetail/ManageDietDetail';
+import ManageDietDialog from 'components/ManageDietDialog/ManageDietDialog';
+import { actions } from 'components/ManageDietDetail/ManageDietDetail';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,14 +25,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Landing = ({ myDiets, myDietActions }) => {
+const Landing = () => {
+  const dispatch = useDispatch();
+  const myDiets = useSelector((state) => state[dietName].diets);
+  const loading = useSelector((state) => state[dietName].loading);
   const [openDietDetails, setOpenDietDetails] = useState(false);
   const [dietDetailsAction, setDietDetailsActions] = useState(actions.add);
   const [selectedDiet, setSelectedDiet] = useState();
   const classes = useStyles();
 
   useEffect(() => {
-    myDietActions.loadDiets();
+    myDietActions.loadDiets()(dispatch);
   }, []);
 
   const toggleDietDetails = () => {
@@ -62,38 +65,29 @@ const Landing = ({ myDiets, myDietActions }) => {
         </Grid>
         <Grid item xs={2} style={{ textAlign: 'right' }}>
           <AddCircleOutlineOutlinedIcon fontSize="large" onClick={toggleDietDetails} />
-          <Dialog open={openDietDetails} onBackdropClick={toggleDietDetails}>
-            <DialogContent>
-              <ManageDietDetail
-                diet={selectedDiet}
-                action={dietDetailsAction}
-                onSave={toggleDietDetails}
-                onCancel={toggleDietDetails}
-                onDelete={toggleDietDetails}
-              />
-            </DialogContent>
-          </Dialog>
+          <ManageDietDialog
+            openDietDetails={openDietDetails}
+            toggleDietDetails={toggleDietDetails}
+            diet={selectedDiet}
+            dietDetailsAction={dietDetailsAction}
+          />
         </Grid>
         {myDiets.map((diet) => (
           <Grid item key={diet.id} xs={12} sm={6}>
-            <DietCard diet={diet} onManage={manageDietDetail} />
+            <DietCard diet={diet} onEdit={manageDietDetail} />
           </Grid>
         ))}
         {
-          myDiets.length === 0 &&
+          !loading && myDiets.length === 0 &&
           <Typography variant="h5" className={classes.noDiets}>No diets yet, click the plus above to add your first one!</Typography>
+        }
+        {
+          loading &&
+          <div>loading</div>
         }
       </Grid>
     </Layout>
   );
 };
 
-const mapStateToProps = (state) => ({
-  myDiets: myDietSelectors.getDiets(state)
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  myDietActions: bindActionCreators({ ...myDietActions }, dispatch)
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Landing);
+export default Landing;

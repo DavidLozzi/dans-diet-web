@@ -25,7 +25,7 @@ function App() {
           <Switch>
             <Route exact path={CONFIG.UI_URL.HOME} component={Login} />
             <Route path={CONFIG.UI_URL.LANDING} component={Landing} />
-            <Route path={CONFIG.UI_URL.MYDIET} component={MyDiet} />
+            <Route path={`${CONFIG.UI_URL.MYDIET}/:id`} component={MyDiet} />
             <Redirect to={CONFIG.UI_URL.ERROR('404')} />
           </Switch>
         </ThemeProvider>
