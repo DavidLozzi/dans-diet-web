@@ -1,8 +1,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import ManageDietDetail, { actions } from 'components/ManageDietDetail/ManageDietDetail';
+import ManageDietDetail from 'components/ManageDietDetail/ManageDietDetail';
 import { Dialog, DialogContent } from '@material-ui/core';
+import CONFIG from 'config';
 
 const ManageDietDialog = ({ openDietDetails, toggleDietDetails, diet, dietDetailsAction }) => {
   return (
@@ -30,7 +31,7 @@ ManageDietDialog.propTypes = {
 ManageDietDialog.defaultProps = {
   openDietDetails: false,
   diet: {},
-  dietDetailsAction: actions.add
+  dietDetailsAction: CONFIG.OPTIONS.ADD
 };
 
 export default ManageDietDialog;

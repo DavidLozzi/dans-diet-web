@@ -10,6 +10,7 @@ import history from 'redux/history';
 import Login from 'components/Login/Login';
 import Landing from 'containers/Landing/Landing';
 import MyDiet from 'containers/MyDiet/MyDiet';
+import ManageFood from 'containers/ManageFood/ManageFood';
 
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
 import myTheme from './myTheme';
@@ -25,7 +26,8 @@ function App() {
           <Switch>
             <Route exact path={CONFIG.UI_URL.HOME} component={Login} />
             <Route path={CONFIG.UI_URL.LANDING} component={Landing} />
-            <Route path={`${CONFIG.UI_URL.MYDIET}/:id`} component={MyDiet} />
+            <Route path={`${CONFIG.UI_URL.MYDIET}/:dietId/food`} component={ManageFood} />
+            <Route path={`${CONFIG.UI_URL.MYDIET}/:dietId`} component={MyDiet} />
             <Redirect to={CONFIG.UI_URL.ERROR('404')} />
           </Switch>
         </ThemeProvider>

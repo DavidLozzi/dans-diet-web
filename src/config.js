@@ -11,7 +11,8 @@ const CONFIG = {
     HOME: '/',
     LANDING: '/landing',
     MYDIET: '/mydiet',
-    ERROR: (code) => `/error/${code}`
+    ERROR: (code) => `/error/${code}`,
+    FOOD: (dietId) => `/mydiet/${dietId}/food`
   },
   DISPLAY_TEXT: {
     ERROR_MESSAGES: {
@@ -24,6 +25,10 @@ const CONFIG = {
   },
   EXTERNAL_LINKS: {
     COPYRIGHT: 'https://davidlozzi.com'
+  },
+  OPTIONS: {
+    ADD: 'Add',
+    EDIT: 'Edit'
   }
 };
 

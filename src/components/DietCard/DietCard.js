@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const DietCard = ({
-  diet, onEdit, onManage
+  diet, onEdit, onManage, showManage, showTotals
 }) => {
   const classes = useStyles();
 
@@ -66,21 +66,27 @@ const DietCard = ({
         <Button size="small" color="primary">
           Share
         </Button>
-        <Button size="small" color="primary" onClick={manageDiet}>
-          Manage
-        </Button>
-        <div className={classes.actionIconWrapper}>
-          <Icon path={mdiBarleyOff} size={1} className={classes.icons} />
-          <span className={classes.iconCount}>
-            :
-            {diet.restricted || 0}
-          </span>
-          <RestaurantOutlinedIcon color="primary" fontSize="small" className={classes.icons} />
-          <span className={classes.iconCount}>
-            :
-            {diet.allowed || 0}
-          </span>
-        </div>
+        {showManage &&
+          (
+            <Button size="small" color="primary" onClick={manageDiet}>
+              Manage
+            </Button>
+          )}
+        {showTotals &&
+          (
+            <div className={classes.actionIconWrapper}>
+              <Icon path={mdiBarleyOff} size={1} className={classes.icons} />
+              <span className={classes.iconCount}>
+                :
+                {diet.restricted || 0}
+              </span>
+              <RestaurantOutlinedIcon color="primary" fontSize="small" className={classes.icons} />
+              <span className={classes.iconCount}>
+                :
+                {diet.allowed || 0}
+              </span>
+            </div>
+          )}
       </CardActions>
     </Card>
   );
@@ -89,12 +95,16 @@ const DietCard = ({
 DietCard.propTypes = {
   diet: PropTypes.shape().isRequired,
   onEdit: PropTypes.func,
-  onManage: PropTypes.func
+  onManage: PropTypes.func,
+  showManage: PropTypes.bool,
+  showTotals: PropTypes.bool
 };
 
 DietCard.defaultProps = {
   onEdit: (diet) => { console.log(`Edit not defined. ${diet}`); },
-  onManage: () => { }
+  onManage: () => { },
+  showManage: true,
+  showTotals: true
 };
 
 export default DietCard;

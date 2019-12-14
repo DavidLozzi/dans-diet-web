@@ -7,7 +7,8 @@ import { actions as myDietActions, name as dietName } from 'redux/api/myDiet/myD
 import Layout from 'containers/Layout/Layout';
 import DietCard from 'components/DietCard/DietCard';
 import ManageDietDialog from 'components/ManageDietDialog/ManageDietDialog';
-import { actions } from 'components/ManageDietDetail/ManageDietDetail';
+
+import CONFIG from 'config';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,7 +31,7 @@ const Landing = () => {
   const myDiets = useSelector((state) => state[dietName].diets);
   const loading = useSelector((state) => state[dietName].loading);
   const [openDietDetails, setOpenDietDetails] = useState(false);
-  const [dietDetailsAction, setDietDetailsActions] = useState(actions.add);
+  const [dietDetailsAction, setDietDetailsActions] = useState(CONFIG.OPTIONS.ADD);
   const [selectedDiet, setSelectedDiet] = useState();
   const classes = useStyles();
 
@@ -45,7 +46,7 @@ const Landing = () => {
 
   const manageDietDetail = (diet) => {
     setSelectedDiet(diet);
-    setDietDetailsActions(actions.edit);
+    setDietDetailsActions(CONFIG.OPTIONS.EDIT);
     setOpenDietDetails(true);
   };
 

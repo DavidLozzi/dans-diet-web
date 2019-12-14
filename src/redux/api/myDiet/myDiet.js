@@ -23,16 +23,9 @@ const sources = [];
 const initialState = {
   diets: [],
   diet: {},
-  loading: false,
+  loading: true,
   error: false,
   errorMessage: ''
-};
-
-export const selectors = {
-  getDiets: (state) => state[name].diets,
-  getLoading: (state) => state[name].loading,
-  getError: (state) => state[name].error,
-  getErrorMessage: (state) => state[name].errorMessage
 };
 
 export const actions = {
