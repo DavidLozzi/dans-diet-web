@@ -4,7 +4,9 @@ const CONFIG = {
   API_URL: {
     AUTH: '/auth',
     DIETS: '/diet',
-    DIET: (dietId) => `/diet/${dietId}`
+    DIET: (dietId) => `/diet/${dietId}`,
+    FOOD: '/food',
+    AFOOD: (foodId) => `/food/${foodId}`
   },
   ACCESS_TOKEN: 'dansdiet-token-storage',
   UI_URL: {
@@ -29,6 +31,10 @@ const CONFIG = {
   OPTIONS: {
     ADD: 'Add',
     EDIT: 'Edit'
+  },
+  RESTRICTIONS: {
+    RESTRICTED: 'Restricted',
+    ALLOWED: 'Allowed'
   }
 };
 

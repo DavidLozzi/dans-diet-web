@@ -62,6 +62,7 @@ const MyDiet = ({ match }) => {
               </h3>
               <FoodList
                 foods={myDiet.foods && myDiet.foods.filter((f) => f.restriction === 'Restricted')}
+                diet={myDiet}
               />
               <h3>
                 <RestaurantOutlinedIcon color="primary" fontSize="small" className={classes.icons} />
@@ -70,6 +71,7 @@ const MyDiet = ({ match }) => {
               </h3>
               <FoodList
                 foods={myDiet.foods && myDiet.foods.filter((f) => f.restriction === 'Allowed')}
+                diet={myDiet}
               />
             </Grid>
           )

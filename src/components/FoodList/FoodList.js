@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import history from 'redux/history';
 import groupBy from 'lodash.groupby';
-import { makeStyles, Collapse, List, ListItem, ListItemText } from '@material-ui/core';
+import { makeStyles, Collapse, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import CONFIG from 'config';
 
@@ -14,18 +15,21 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#EEEEEE',
     padding: theme.spacing(),
   },
-  food: {
-    padding: theme.spacing(),
-    border: '1px solid #aaa'
+  list: {
+    borderBottom: `1px solid ${theme.palette.grey[400]}`
   }
 }));
 
 
 const FoodList = ({
-  foods, onEdit, onManage
+  foods, diet, onEdit, onManage
 }) => {
   const classes = useStyles();
   const groupedFoods = groupBy(foods, 'category');
+
+  const editFood = (foodId) => {
+    history.push(`${CONFIG.UI_URL.FOOD(diet._id)}?foodId=${foodId}`);
+  };
 
   return (
     <List
@@ -34,7 +38,7 @@ const FoodList = ({
         Object.keys(groupedFoods).map((key) => {
           const category = groupedFoods[key];
           return (
-            <>
+            <div key={key}>
               <ListItem
                 className={classes.category}
               >
@@ -51,14 +55,18 @@ const FoodList = ({
                     >
                       <ListItemText
                         primary={food.name}
-                        className={classes.food}
                       />
+                      <ListItemSecondaryAction>
+                        <IconButton edge="end" onClick={() => editFood(food._id)}>
+                          <EditIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
                     </ListItem>
                   )
                   )}
                 </List>
               </Collapse>
-            </>
+            </div>
           );
         }
         )
@@ -70,6 +78,7 @@ const FoodList = ({
 
 FoodList.propTypes = {
   foods: PropTypes.arrayOf(PropTypes.shape),
+  diet: PropTypes.shape().isRequired,
   onEdit: PropTypes.func,
   onManage: PropTypes.func
 };
