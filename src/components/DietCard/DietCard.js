@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, CardActions, CardContent, makeStyles, Typography } from '@material-ui/core';
 import Icon from '@mdi/react';
@@ -7,6 +7,7 @@ import RestaurantOutlinedIcon from '@material-ui/icons/RestaurantOutlined';
 import EditIcon from '@material-ui/icons/Edit';
 import history from 'redux/history';
 import CONFIG from 'config';
+import ShareDietDialog from 'components/ShareDietDialog/ShareDietDialog';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -39,6 +40,7 @@ const DietCard = ({
   diet, onEdit, onManage, showManage, showTotals
 }) => {
   const classes = useStyles();
+  const [openShareDiet, setOpenShareDiet] = useState(false);
 
   const editDiet = () => {
     if (onEdit) onEdit(diet);
@@ -47,6 +49,10 @@ const DietCard = ({
   const manageDiet = () => {
     if (onManage) onManage(diet);
     history.push(`${CONFIG.UI_URL.MYDIET}/${diet._id}`);
+  };
+
+  const toggleShareDiet = () => {
+    setOpenShareDiet(!openShareDiet);
   };
 
   return (
@@ -63,8 +69,14 @@ const DietCard = ({
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" color="primary">
-          Share
+        <ShareDietDialog
+          diet={diet}
+          onClose={toggleShareDiet}
+          toggleShareDiet={toggleShareDiet}
+          openShareDiet={openShareDiet}
+        />
+        <Button size="small" color="primary" onClick={() => setOpenShareDiet(true)}>
+          Share{diet.isShared && 'd'}
         </Button>
         {showManage &&
           (
