@@ -9,9 +9,7 @@ import { loginUser as loginUserUtil } from 'utils/accountUtil/accountUtil';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '100vh'
-  },
-  image: {
+    height: '100vh',
     backgroundImage: 'url(https://source.unsplash.com/featured/?food)',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
@@ -19,9 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     margin: theme.spacing(8, 4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    padding: theme.spacing(2),
   },
   avatar: {
     margin: theme.spacing(1),
@@ -76,12 +72,9 @@ const Login = () => {
 
   return (
     <Grid container className={classes.root}>
-      <Grid item xs={12} sm={4} md={7} className={classes.image} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
+      <Grid item xs={0} sm={4} md={7} />
+      <Grid item xs={12} sm={8} md={5} elevation={6} square>
+        <Paper className={classes.paper}>
           <Typography component="h1" variant="h5">
             {`${parse(CONFIG.APP_NAME)} Sign In`}
           </Typography>
@@ -128,7 +121,7 @@ const Login = () => {
           >
             Sign In
           </Button>
-        </div>
+        </Paper>
       </Grid>
     </Grid>
   );
