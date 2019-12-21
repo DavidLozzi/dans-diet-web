@@ -5,6 +5,8 @@ const CONFIG = {
     AUTH: '/auth',
     DIETS: '/diet',
     DIET: (dietId) => `/diet/${dietId}`,
+    SHARE_DIET: (dietId) => `/diet/${dietId}/share`,
+    UNSHARE_DIET: (dietId) => `/diet/${dietId}/unshare`,
     FOOD: '/food',
     AFOOD: (foodId) => `/food/${foodId}`
   },
@@ -14,7 +16,8 @@ const CONFIG = {
     LANDING: '/landing',
     MYDIET: '/mydiet',
     ERROR: (code) => `/error/${code}`,
-    FOOD: (dietId) => `/mydiet/${dietId}/food`
+    FOOD: (dietId) => `/mydiet/${dietId}/food`,
+    VIEW: (shareId) => `/viewdiet/${shareId}`
   },
   DISPLAY_TEXT: {
     ERROR_MESSAGES: {

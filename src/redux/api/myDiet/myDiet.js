@@ -10,6 +10,12 @@ export const API_MYDIET_GET_FAILED = 'API_MYDIET_GET_FAILED';
 export const API_MYDIET_SAVE_PENDING = 'API_MYDIET_SAVE_PENDING';
 export const API_MYDIET_SAVE_SUCCESS = 'API_MYDIET_SAVE_SUCCESS';
 export const API_MYDIET_SAVE_FAILED = 'API_MYDIET_SAVE_FAILED';
+export const API_MYDIET_SHARE_PENDING = 'API_MYDIET_SHARE_PENDING';
+export const API_MYDIET_SHARE_SUCCESS = 'API_MYDIET_SHARE_SUCCESS';
+export const API_MYDIET_SHARE_FAILED = 'API_MYDIET_SHARE_FAILED';
+export const API_MYDIET_UNSHARE_PENDING = 'API_MYDIET_UNSHARE_PENDING';
+export const API_MYDIET_UNSHARE_SUCCESS = 'API_MYDIET_UNSHARE_SUCCESS';
+export const API_MYDIET_UNSHARE_FAILED = 'API_MYDIET_UNSHARE_FAILED';
 export const API_MYDIET_UPDATE_PENDING = 'API_MYDIET_UPDATE_PENDING';
 export const API_MYDIET_UPDATE_SUCCESS = 'API_MYDIET_UPDATE_SUCCESS';
 export const API_MYDIET_UPDATE_FAILED = 'API_MYDIET_UPDATE_FAILED';
@@ -25,7 +31,12 @@ const initialState = {
   diet: {},
   loading: true,
   error: false,
-  errorMessage: ''
+  errorMessage: '',
+  sharing: {
+    loading: false,
+    error: false,
+    errorMessage: ''
+  }
 };
 
 export const actions = {
@@ -68,6 +79,36 @@ export const actions = {
       dispatch({ type: API_MYDIET_SAVE_SUCCESS, payload: response });
     } catch (error) {
       dispatch({ type: API_MYDIET_SAVE_FAILED, payload: error });
+    }
+  },
+  shareDiet: (diet) => async (dispatch) => {
+    const newSource = axios.CancelToken.source();
+    sources.push(newSource);
+
+    dispatch({ type: API_MYDIET_SHARE_PENDING });
+
+    try {
+      const response = await axios.post(CONFIG.API_URL.SHARE_DIET(diet._id),
+        { ...diet },
+        { cancelToken: newSource.token });
+      dispatch({ type: API_MYDIET_SHARE_SUCCESS, payload: response });
+    } catch (error) {
+      dispatch({ type: API_MYDIET_SHARE_FAILED, payload: error });
+    }
+  },
+  unshareDiet: (diet) => async (dispatch) => {
+    const newSource = axios.CancelToken.source();
+    sources.push(newSource);
+
+    dispatch({ type: API_MYDIET_UNSHARE_PENDING });
+
+    try {
+      const response = await axios.post(CONFIG.API_URL.UNSHARE_DIET(diet._id),
+        { ...diet },
+        { cancelToken: newSource.token });
+      dispatch({ type: API_MYDIET_UNSHARE_SUCCESS, payload: response });
+    } catch (error) {
+      dispatch({ type: API_MYDIET_UNSHARE_FAILED, payload: error });
     }
   },
   updateDiet: (diet) => async (dispatch) => {
@@ -144,6 +185,37 @@ export function reducer(state = initialState, action) {
         loading: false,
         error: false,
         diet: action.payload
+      };
+    case API_MYDIET_SHARE_PENDING:
+    case API_MYDIET_UNSHARE_PENDING:
+      return {
+        ...state,
+        sharing: {
+          loading: true,
+          error: false,
+          errorMessage: ''
+        }
+      };
+    case API_MYDIET_SHARE_SUCCESS:
+    case API_MYDIET_UNSHARE_SUCCESS:
+      return {
+        ...state,
+        diet: action.payload,
+        sharing: {
+          loading: false,
+          error: false,
+          errorMessage: ''
+        }
+      };
+    case API_MYDIET_SHARE_FAILED:
+    case API_MYDIET_UNSHARE_FAILED:
+      return {
+        ...state,
+        sharing: {
+          loading: false,
+          error: true,
+          errorMessage: action.payload
+        }
       };
     default:
       return state;
