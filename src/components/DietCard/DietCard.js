@@ -4,6 +4,9 @@ import { Button, Card, CardActions, CardContent, makeStyles, Typography } from '
 import Icon from '@mdi/react';
 import { mdiBarleyOff } from '@mdi/js';
 import RestaurantOutlinedIcon from '@material-ui/icons/RestaurantOutlined';
+import EditIcon from '@material-ui/icons/Edit';
+import history from 'redux/history';
+import CONFIG from 'config';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -12,12 +15,15 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing()
     }
   },
-  iconWrapper: {
+  actionIconWrapper: {
     marginLeft: 'auto',
     marginRight: theme.spacing(),
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  topIconWrapper: {
+    float: 'right'
   },
   icons: {
     fill: theme.palette.grey[500],
@@ -29,16 +35,26 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const DietCard = ({ diet, onManage }) => {
+const DietCard = ({
+  diet, onEdit, onManage, showManage, showTotals
+}) => {
   const classes = useStyles();
+
+  const editDiet = () => {
+    if (onEdit) onEdit(diet);
+  };
 
   const manageDiet = () => {
     if (onManage) onManage(diet);
+    history.push(`${CONFIG.UI_URL.MYDIET}/${diet._id}`);
   };
 
   return (
     <Card title={diet.title} className={classes.card}>
       <CardContent>
+        <div className={classes.topIconWrapper}>
+          <EditIcon color="primary" fontSize="small" className={classes.icons} onClick={editDiet} />
+        </div>
         <Typography variant="h5" gutterBottom component="h2">
           {diet.title}
         </Typography>
@@ -50,21 +66,27 @@ const DietCard = ({ diet, onManage }) => {
         <Button size="small" color="primary">
           Share
         </Button>
-        <Button size="small" color="primary" onClick={manageDiet}>
-          Manage
-        </Button>
-        <div className={classes.iconWrapper}>
-          <Icon path={mdiBarleyOff} size={1} className={classes.icons} />
-          <span className={classes.iconCount}>
-            :
-            {diet.restricted || 0}
-          </span>
-          <RestaurantOutlinedIcon color="primary" fontSize="small" className={classes.icons} />
-          <span className={classes.iconCount}>
-            :
-            {diet.allowed || 0}
-          </span>
-        </div>
+        {showManage &&
+          (
+            <Button size="small" color="primary" onClick={manageDiet}>
+              Manage
+            </Button>
+          )}
+        {showTotals &&
+          (
+            <div className={classes.actionIconWrapper}>
+              <Icon path={mdiBarleyOff} size={1} className={classes.icons} />
+              <span className={classes.iconCount}>
+                :
+                {diet.restricted || 0}
+              </span>
+              <RestaurantOutlinedIcon color="primary" fontSize="small" className={classes.icons} />
+              <span className={classes.iconCount}>
+                :
+                {diet.allowed || 0}
+              </span>
+            </div>
+          )}
       </CardActions>
     </Card>
   );
@@ -72,11 +94,17 @@ const DietCard = ({ diet, onManage }) => {
 
 DietCard.propTypes = {
   diet: PropTypes.shape().isRequired,
-  onManage: PropTypes.func
+  onEdit: PropTypes.func,
+  onManage: PropTypes.func,
+  showManage: PropTypes.bool,
+  showTotals: PropTypes.bool
 };
 
 DietCard.defaultProps = {
-  onManage: (diet) => { console.log(`Manage not defined. ${diet}`); }
+  onEdit: (diet) => { console.log(`Edit not defined. ${diet}`); },
+  onManage: () => { },
+  showManage: true,
+  showTotals: true
 };
 
 export default DietCard;

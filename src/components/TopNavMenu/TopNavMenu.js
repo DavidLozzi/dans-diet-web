@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import parse from 'html-react-parser';
+import history from 'redux/history';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Divider, Drawer, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
@@ -24,21 +25,34 @@ const useStyles = makeStyles((theme) => ({
 })
 );
 
-const TopNavMenu = ({ open, closeMenu, onClose }) => {
+const TopNavMenu = ({
+  open, closeMenu, onClose
+}) => {
   const classes = useStyles();
+  const menu = [
+    {
+      label: 'My Diets',
+      url: CONFIG.UI_URL.LANDING
+    },
+    {
+      label: 'View a Diet',
+      url: '/view'
+    }
+  ];
 
-  const copyright = () => {
-    return (
-      <Typography variant="caption" color="textSecondary" align="center" className={classes.copyright}>
-        {parse('Copyright &copy; ') }
-        <Link color="inherit" href={CONFIG.EXTERNAL_LINKS.COPYRIGHT} target="_blank">
-          David Lozzi
-        </Link>
-        {` ${new Date().getFullYear()}.`}
-      </Typography>
-    );
+  const goToPage = (url) => {
+    history.push(url);
   };
 
+  const copyright = () => (
+    <Typography variant="caption" color="textSecondary" align="center" className={classes.copyright}>
+      {parse('Copyright &copy; ')}
+      {` ${new Date().getFullYear()} `}
+      <Link color="inherit" href={CONFIG.EXTERNAL_LINKS.COPYRIGHT} target="_blank">
+        David Lozzi
+      </Link>
+    </Typography>
+  );
 
   const sideList = () => (
     <div
@@ -48,10 +62,10 @@ const TopNavMenu = ({ open, closeMenu, onClose }) => {
       onKeyDown={closeMenu}
     >
       <List>
-        {['My Diet', 'Share Diet', 'View Diet'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
+        {menu.map((item) => (
+          <ListItem button key={item.url} onClick={() => goToPage(item.url)}>
+            {/* <ListItemIcon>{item.icon}</ListItemIcon> */}
+            <ListItemText primary={item.label} />
           </ListItem>
         ))}
       </List>

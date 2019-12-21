@@ -4,11 +4,6 @@ import PropTypes from 'prop-types';
 import { actions as dietActions, name as dietName } from 'redux/api/myDiet/myDiet';
 import { Box, Typography, TextField, Button, makeStyles, Dialog, DialogContent, DialogActions, DialogContentText } from '@material-ui/core';
 
-export const actions = {
-  add: 'Add',
-  edit: 'Edit'
-};
-
 const useStyles = makeStyles((theme) => ({
   button: {
     marginTop: 10

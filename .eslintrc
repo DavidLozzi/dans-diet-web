@@ -68,7 +68,15 @@
       "error",
       "after"
     ],
-    "react/jsx-one-expression-per-line": 0
+    "react/jsx-one-expression-per-line": 0,
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allow": [
+          "_id"
+        ]
+      }
+    ]
   },
   "globals": {
     "_satellite": true

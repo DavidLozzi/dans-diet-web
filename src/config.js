@@ -4,14 +4,17 @@ const CONFIG = {
   API_URL: {
     AUTH: '/auth',
     DIETS: '/diet',
-    DIET: (dietId) => `/diet/${dietId}`
+    DIET: (dietId) => `/diet/${dietId}`,
+    FOOD: '/food',
+    AFOOD: (foodId) => `/food/${foodId}`
   },
   ACCESS_TOKEN: 'dansdiet-token-storage',
   UI_URL: {
     HOME: '/',
     LANDING: '/landing',
     MYDIET: '/mydiet',
-    ERROR: (code) => `/error/${code}`
+    ERROR: (code) => `/error/${code}`,
+    FOOD: (dietId) => `/mydiet/${dietId}/food`
   },
   DISPLAY_TEXT: {
     ERROR_MESSAGES: {
@@ -24,6 +27,14 @@ const CONFIG = {
   },
   EXTERNAL_LINKS: {
     COPYRIGHT: 'https://davidlozzi.com'
+  },
+  OPTIONS: {
+    ADD: 'Add',
+    EDIT: 'Edit'
+  },
+  RESTRICTIONS: {
+    RESTRICTED: 'Restricted',
+    ALLOWED: 'Allowed'
   }
 };
 
