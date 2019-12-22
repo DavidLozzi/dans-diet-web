@@ -22,6 +22,7 @@ export const API_MYDIET_UPDATE_FAILED = 'API_MYDIET_UPDATE_FAILED';
 export const API_MYDIET_DELETE_PENDING = 'API_MYDIET_DELETE_PENDING';
 export const API_MYDIET_DELETE_SUCCESS = 'API_MYDIET_DELETE_SUCCESS';
 export const API_MYDIET_DELETE_FAILED = 'API_MYDIET_DELETE_FAILED';
+export const API_MYDIET_LOADED = 'API_MYDIET_LOADED';
 
 export const name = 'mydiet';
 
@@ -61,6 +62,19 @@ export const actions = {
 
     try {
       const response = await axios.get(CONFIG.API_URL.DIET(id), { cancelToken: newSource.token });
+      dispatch({ type: API_MYDIET_GET_SUCCESS, payload: response });
+    } catch (error) {
+      dispatch({ type: API_MYDIET_GET_FAILED, payload: error });
+    }
+  },
+  getDietbyShareId: (id) => async (dispatch) => {
+    const newSource = axios.CancelToken.source();
+    sources.push(newSource);
+
+    dispatch({ type: API_MYDIET_GET_PENDING });
+
+    try {
+      const response = await axios.get(CONFIG.API_URL.VIEW_DIET(id), { cancelToken: newSource.token });
       dispatch({ type: API_MYDIET_GET_SUCCESS, payload: response });
     } catch (error) {
       dispatch({ type: API_MYDIET_GET_FAILED, payload: error });
@@ -139,6 +153,9 @@ export const actions = {
     } catch (error) {
       dispatch({ type: API_MYDIET_DELETE_FAILED, payload: error });
     }
+  },
+  setLoadingFalse: () => async (dispatch) => {
+    dispatch({ type: API_MYDIET_LOADED });
   }
   // cancel: () => async (dispatch) => {
   //   //TODO
@@ -216,6 +233,11 @@ export function reducer(state = initialState, action) {
           error: true,
           errorMessage: action.payload
         }
+      };
+    case API_MYDIET_LOADED:
+      return {
+        ...state,
+        loading: false
       };
     default:
       return state;

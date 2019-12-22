@@ -36,7 +36,7 @@ const TopNavMenu = ({
     },
     {
       label: 'View a Diet',
-      url: '/view'
+      url: CONFIG.UI_URL.VIEWDIET
     }
   ];
 

@@ -48,12 +48,13 @@ const MyDiet = ({ match }) => {
         container
         className={classes.root}
       >
+        <Grid item xs={0} sm={1} />
         {loading &&
           <div>LOADING...</div>
         }
         {!loading &&
           (
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={10}>
               <DietCard diet={myDiet} showManage={false} showTotals={false} />
               <h3>
                 <Icon path={mdiBarleyOff} size={1} className={classes.icons} />

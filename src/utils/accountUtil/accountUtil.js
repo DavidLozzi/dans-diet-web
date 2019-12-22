@@ -1,7 +1,7 @@
 import axios from 'axios';
 import CONFIG from 'config';
 
-import { saveToLocalStorage, removeFromLocalStorage } from 'utils/localStorage/localStorage';
+import { saveToLocalStorage, removeFromLocalStorage, getFromLocalStorage } from 'utils/localStorage/localStorage';
 
 export const loginUser = (email, password) => axios
   .post(CONFIG.API_URL.AUTH,
@@ -22,4 +22,12 @@ export const loginUser = (email, password) => axios
 export const logoutUser = () => {
   removeFromLocalStorage(CONFIG.ACCESS_TOKEN);
   window.location.href = CONFIG.UI_URL.HOME;
+};
+
+export const isUserLoggedIn = () => {
+  const accessToken = getFromLocalStorage(CONFIG.ACCESS_TOKEN);
+  if (!accessToken) {
+    return false;
+  }
+  return true;
 };
