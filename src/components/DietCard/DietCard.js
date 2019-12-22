@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const DietCard = ({
-  diet, onEdit, onManage, showManage, showTotals
+  diet, onEdit, onManage, showManage, showTotals, readOnly, titlePrefix
 }) => {
   const classes = useStyles();
   const [openShareDiet, setOpenShareDiet] = useState(false);
@@ -58,48 +58,56 @@ const DietCard = ({
   return (
     <Card title={diet.title} className={classes.card}>
       <CardContent>
-        <div className={classes.topIconWrapper}>
-          <EditIcon color="primary" fontSize="small" className={classes.icons} onClick={editDiet} />
-        </div>
+        {!readOnly &&
+          (
+            <div className={classes.topIconWrapper}>
+              <EditIcon color="primary" fontSize="small" className={classes.icons} onClick={editDiet} />
+            </div>
+          )
+        }
         <Typography variant="h5" gutterBottom component="h2">
-          {diet.title}
+          {titlePrefix} {diet.title}
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p">
           {diet.description}
         </Typography>
       </CardContent>
-      <CardActions>
-        <ShareDietDialog
-          diet={diet}
-          onClose={toggleShareDiet}
-          toggleShareDiet={toggleShareDiet}
-          openShareDiet={openShareDiet}
-        />
-        <Button size="small" color="primary" onClick={() => setOpenShareDiet(true)}>
-          Share{diet.isShared && 'd'}
-        </Button>
-        {showManage &&
-          (
-            <Button size="small" color="primary" onClick={manageDiet}>
-              Manage
+      {!readOnly &&
+        (
+          <CardActions>
+            <ShareDietDialog
+              diet={diet}
+              onClose={toggleShareDiet}
+              toggleShareDiet={toggleShareDiet}
+              openShareDiet={openShareDiet}
+            />
+            <Button size="small" color="primary" onClick={() => setOpenShareDiet(true)}>
+              Share{diet.isShared && 'd'}
             </Button>
-          )}
-        {showTotals &&
-          (
-            <div className={classes.actionIconWrapper}>
-              <Icon path={mdiBarleyOff} size={1} className={classes.icons} />
-              <span className={classes.iconCount}>
-                :
-                {diet.restricted || 0}
-              </span>
-              <RestaurantOutlinedIcon color="primary" fontSize="small" className={classes.icons} />
-              <span className={classes.iconCount}>
-                :
-                {diet.allowed || 0}
-              </span>
-            </div>
-          )}
-      </CardActions>
+            {showManage &&
+              (
+                <Button size="small" color="primary" onClick={manageDiet}>
+                  Manage
+                </Button>
+              )}
+            {showTotals &&
+              (
+                <div className={classes.actionIconWrapper}>
+                  <Icon path={mdiBarleyOff} size={1} className={classes.icons} />
+                  <span className={classes.iconCount}>
+                    :
+                    {diet.restricted || 0}
+                  </span>
+                  <RestaurantOutlinedIcon color="primary" fontSize="small" className={classes.icons} />
+                  <span className={classes.iconCount}>
+                    :
+                    {diet.allowed || 0}
+                  </span>
+                </div>
+              )}
+          </CardActions>
+        )
+      }
     </Card>
   );
 };
@@ -109,14 +117,18 @@ DietCard.propTypes = {
   onEdit: PropTypes.func,
   onManage: PropTypes.func,
   showManage: PropTypes.bool,
-  showTotals: PropTypes.bool
+  showTotals: PropTypes.bool,
+  readOnly: PropTypes.bool,
+  titlePrefix: PropTypes.string
 };
 
 DietCard.defaultProps = {
   onEdit: (diet) => { console.log(`Edit not defined. ${diet}`); },
   onManage: () => { },
   showManage: true,
-  showTotals: true
+  showTotals: true,
+  readOnly: false,
+  titlePrefix: ''
 };
 
 export default DietCard;

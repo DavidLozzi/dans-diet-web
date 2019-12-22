@@ -74,7 +74,7 @@ const Login = () => {
     <Grid container className={classes.root}>
       <Grid item xs={0} sm={4} md={7} />
       <Grid item xs={12} sm={8} md={5} elevation={6} square>
-        <Paper className={classes.paper}>
+        <Paper className={classes.paper} elevation={5}>
           <Typography component="h1" variant="h5">
             {`${parse(CONFIG.APP_NAME)} Sign In`}
           </Typography>

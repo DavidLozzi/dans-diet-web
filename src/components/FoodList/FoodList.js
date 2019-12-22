@@ -22,12 +22,13 @@ const useStyles = makeStyles((theme) => ({
 
 
 const FoodList = ({
-  foods, diet, onEdit, onManage
+  foods, diet, onEdit, readonly
 }) => {
   const classes = useStyles();
   const groupedFoods = groupBy(foods, 'category');
 
   const editFood = (foodId) => {
+    if (onEdit) onEdit()
     history.push(`${CONFIG.UI_URL.FOOD(diet._id)}?foodId=${foodId}`);
   };
 
@@ -55,12 +56,17 @@ const FoodList = ({
                     >
                       <ListItemText
                         primary={food.name}
+                        secondary={food.notes}
                       />
-                      <ListItemSecondaryAction>
-                        <IconButton edge="end" onClick={() => editFood(food._id)}>
-                          <EditIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
+                      {!readonly &&
+                        (
+                          <ListItemSecondaryAction>
+                            <IconButton edge="end" onClick={() => editFood(food._id)}>
+                              <EditIcon />
+                            </IconButton>
+                          </ListItemSecondaryAction>
+                        )
+                      }
                     </ListItem>
                   )
                   )}
@@ -80,13 +86,13 @@ FoodList.propTypes = {
   foods: PropTypes.arrayOf(PropTypes.shape),
   diet: PropTypes.shape().isRequired,
   onEdit: PropTypes.func,
-  onManage: PropTypes.func
+  readonly: PropTypes.bool
 };
 
 FoodList.defaultProps = {
   foods: [],
   onEdit: (food) => { console.log(`Edit not defined. ${food}`); },
-  onManage: () => { }
+  readonly: false
 };
 
 export default FoodList;

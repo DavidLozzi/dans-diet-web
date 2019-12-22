@@ -56,6 +56,7 @@ const Landing = () => {
         container
         className={classes.root}
       >
+        <Grid item xs={1} />
         <Grid item xs={10}>
           <Typography
             variant="h3"
@@ -64,7 +65,7 @@ const Landing = () => {
             My Diets
           </Typography>
         </Grid>
-        <Grid item xs={2} style={{ textAlign: 'right' }}>
+        <Grid item xs={2} style={{ textAlign: 'right', alignContent: 'right' }}>
           <AddCircleOutlineOutlinedIcon fontSize="large" onClick={toggleDietDetails} />
           <ManageDietDialog
             openDietDetails={openDietDetails}

@@ -8,7 +8,7 @@ axios.defaults.baseURL = CONFIG.SERVER_URL;
 
 axios.interceptors.request.use((config) => {
   let accessToken = null;
-  if (config.url.indexOf(CONFIG.API_URL.AUTH) === -1) {
+  if (config.url.indexOf(CONFIG.API_URL.AUTH) === -1 && config.url.indexOf(CONFIG.API_URL.VIEW) === -1) {
     accessToken = getFromLocalStorage(CONFIG.ACCESS_TOKEN);
     if (!accessToken) {
       window.location.href = '/';

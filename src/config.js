@@ -4,7 +4,9 @@ const CONFIG = {
   API_URL: {
     AUTH: '/auth',
     DIETS: '/diet',
+    VIEW: '/view',
     DIET: (dietId) => `/diet/${dietId}`,
+    VIEW_DIET: (shareId) => `/view/${shareId}`,
     SHARE_DIET: (dietId) => `/diet/${dietId}/share`,
     UNSHARE_DIET: (dietId) => `/diet/${dietId}/unshare`,
     FOOD: '/food',
@@ -17,6 +19,7 @@ const CONFIG = {
     MYDIET: '/mydiet',
     ERROR: (code) => `/error/${code}`,
     FOOD: (dietId) => `/mydiet/${dietId}/food`,
+    VIEWDIET: '/viewdiet',
     VIEW: (shareId) => `/viewdiet/${shareId}`
   },
   DISPLAY_TEXT: {
