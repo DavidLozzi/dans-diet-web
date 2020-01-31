@@ -22,7 +22,7 @@ export const actions = {
     const newSource = axios.CancelToken.source();
     sources.push(newSource);
 
-    dispatch({ type: API_GROCERIES_PENDING, text});
+    dispatch({ type: API_GROCERIES_PENDING, text });
 
     axios.get(CONFIG.API_URL.GROCERIES(text),
       { cancelToken: newSource.token })

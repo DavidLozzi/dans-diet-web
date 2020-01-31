@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import debounce from 'debounce';
 import PropTypes from 'prop-types';
 import { makeStyles, Grid, TextField, Select, InputLabel, MenuItem, FormControlLabel, FormControl, FormHelperText, Button, Switch } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -23,7 +24,8 @@ const ManageFoodForm = ({ diet, food, onSave, onCancel, onDone }) => {
   const [action, setAction] = useState(CONFIG.OPTIONS.ADD);
   const [addMore, setAddMore] = useState(true);
   const [searchText, setSearchText] = useState('a');
-  const options = useSelector((state) => state[groceriesName][searchText].options);
+  const typeaheadOptions = useSelector((state) => state[groceriesName][searchText].options);
+  const typeaheadState = useSelector((state) => state[groceriesName][searchText].state);
 
   useEffect(() => {
     if (food && diet.foods && food._id !== '' && food._id !== undefined) {
@@ -33,7 +35,7 @@ const ManageFoodForm = ({ diet, food, onSave, onCancel, onDone }) => {
   }, []);
 
   const clearForm = () => {
-    setMyFood({ restriction: food.restriction, dietId: diet._id });
+    setMyFood({ name: '', category: '', notes: '', restriction: food.restriction, dietId: diet._id });
   };
 
   const saveFood = () => {
@@ -52,12 +54,12 @@ const ManageFoodForm = ({ diet, food, onSave, onCancel, onDone }) => {
     if (onCancel) onCancel();
   };
 
-  const typeahead = (text) => {
-    if (text) {
+  const typeahead = debounce((text) => {
+    if (text && text.length >= 2) {
       dispatch(groceriesActions.search(text));
       setSearchText(text);
     }
-  };
+  }, 200);
 
   return (
     <Grid
@@ -65,26 +67,25 @@ const ManageFoodForm = ({ diet, food, onSave, onCancel, onDone }) => {
       className={classes.root}
     >
       <Grid item xs={12} md={6}>
-        <h3>{diet.title}: {action} Food</h3>
-        {/* <TextField
-          id=name
-          label='Name of Food or Beverage'
-          fullWidth
-          autoFocus
-          value={myFood.name}
-          onChange={(e) => setMyFood({ ...myFood, name: e.target.value })}
-        /> */}
+        <h3>{diet.title}: {action} Food {myFood.name} {myFood.category} </h3>
         <Autocomplete
           id="name"
           onChange={(e, t) => t && setMyFood({ ...myFood, name: t.name, category: t.aisle.split(';')[0] })}
           onInputChange={(e, text) => typeahead(text)}
-          options={options.sort((a, b) => -b.aisle.localeCompare(a.aisle))}
-          groupBy={(option) => option.aisle}
+          options={typeaheadOptions.sort((a, b) => b.aisle && -b.aisle.localeCompare(a.aisle))}
+          groupBy={(option) => option.aisle && option.aisle.split(';')[0]}
           getOptionLabel={(option) => option.name}
-          noOptionsText="Begin typing..."
+          noOptionsText="Enter your food..."
           fullWidth
+          freeSolo
+          autoComplete
           renderInput={(params) => (
-            <TextField {...params} label="Name of Food or Beverage" value={myFood.name} fullWidth />
+            <TextField
+              {...params}
+              label="Name of Food or Beverage"
+              value={myFood.name}
+              fullWidth
+            />
           )}
         />
         <TextField

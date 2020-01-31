@@ -65,7 +65,7 @@ const Landing = () => {
             My Diets
           </Typography>
         </Grid>
-        <Grid item xs={2} style={{ textAlign: 'right', alignContent: 'right' }}>
+        <Grid item xs={1} style={{ textAlign: 'right', alignContent: 'right' }}>
           <AddCircleOutlineOutlinedIcon fontSize="large" onClick={toggleDietDetails} />
           <ManageDietDialog
             openDietDetails={openDietDetails}
