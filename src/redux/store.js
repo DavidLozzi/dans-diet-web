@@ -6,6 +6,7 @@ import thunkMiddleware from 'redux-thunk';
 import history from 'redux/history';
 
 import { name as myDietReducerName, reducer as myDietReducer } from 'redux/api/myDiet/myDiet';
+import { name as groceriesReducerName, reducer as groceriesReducer } from 'redux/api/groceries/groceries';
 
 const middleware = [ // Order dependent
   thunkMiddleware, // Enables actions to return functions
@@ -18,6 +19,7 @@ if (process.env.NODE_ENV !== 'production') {
 const store = createStore(
   combineReducers({
     [myDietReducerName]: myDietReducer,
+    [groceriesReducerName]: groceriesReducer,
     router: connectRouter(history)
   }),
   compose(applyMiddleware(...middleware))

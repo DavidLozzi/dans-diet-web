@@ -10,7 +10,8 @@ const CONFIG = {
     SHARE_DIET: (dietId) => `/diet/${dietId}/share`,
     UNSHARE_DIET: (dietId) => `/diet/${dietId}/unshare`,
     FOOD: '/food',
-    AFOOD: (foodId) => `/food/${foodId}`
+    AFOOD: (foodId) => `/food/${foodId}`,
+    GROCERIES: (text) => `/groceries/${text}`
   },
   ACCESS_TOKEN: 'dansdiet-token-storage',
   UI_URL: {
