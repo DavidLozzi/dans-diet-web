@@ -40,7 +40,7 @@ const ViewDiet = ({ match }) => {
       setidProvided(false);
       dietActions.setLoadingFalse()(dispatch);
     }
-  }, []);
+  }, [dispatch, match.params.shareId]);
 
   return (
     <Layout showTopNav>

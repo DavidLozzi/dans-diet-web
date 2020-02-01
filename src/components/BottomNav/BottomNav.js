@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, BottomNavigation, BottomNavigationAction, } from '@material-ui/core';
-import { Restore as RestoreIcon, Favorite as FavoriteIcon, LocationOn as LocationOnIcon } from '@material-ui/icons';
+// import { Restore as RestoreIcon, Favorite as FavoriteIcon, LocationOn as LocationOnIcon } from '@material-ui/icons';
 
 const useStyles = makeStyles({
   root: {
@@ -21,11 +21,11 @@ const BottomNav = () => {
       showLabels
       className={classes.root}
     >
-      <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
+      {/* <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
       <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-      <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+      <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} /> */}
     </BottomNavigation>
   );
 }
 
-export default BottomNavigation;
+export default BottomNav;

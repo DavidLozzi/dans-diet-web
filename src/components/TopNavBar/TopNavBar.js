@@ -28,8 +28,7 @@ const TopNavBar = () => {
 
   useEffect(() => {
     setLoggedIn(isUserLoggedIn());
-    console.log(loggedIn);
-  }, []);
+  }, [loggedIn]);
 
   const toggleMenu = () => {
     setOpenMenu(!openMenu);
@@ -37,6 +36,10 @@ const TopNavBar = () => {
 
   const loginUser = () => {
     history.push(CONFIG.HOME);
+  };
+
+  const goHome = () => {
+    history.push(CONFIG.UI_URL.LANDING);
   };
 
   return (
@@ -56,7 +59,7 @@ const TopNavBar = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h6" className={classes.title} onClick={goHome}>
             {parse(CONFIG.APP_NAME)}
           </Typography>
           {loggedIn ?

@@ -52,14 +52,14 @@ export const actions = {
       dispatch({ type: API_FOOD_UPDATE_FAILED, payload: error });
     }
   },
-  deleteFood: (dietId) => async (dispatch) => {
+  deleteFood: (foodId) => async (dispatch) => {
     const newSource = axios.CancelToken.source();
     sources.push(newSource);
 
     dispatch({ type: API_FOOD_DELETE_PENDING });
 
     try {
-      const response = await axios.delete(CONFIG.API_URL.DIET(dietId),
+      const response = await axios.delete(CONFIG.API_URL.AFOOD(foodId),
         { cancelToken: newSource.token });
       dispatch({ type: API_FOOD_DELETE_SUCCESS, payload: response });
     } catch (error) {

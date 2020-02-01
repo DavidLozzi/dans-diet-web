@@ -3,17 +3,34 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { actions as dietActions, name as dietName } from 'redux/api/myDiet/myDiet';
 import { Box, Typography, TextField, Button, makeStyles, Dialog, DialogContent, DialogActions, DialogContentText } from '@material-ui/core';
+import PhotoSearch from 'components/PhotoSearch/PhotoSearch';
 
 const useStyles = makeStyles((theme) => ({
   button: {
     marginTop: 10
   },
+  image: {
+    width: '100%',
+    height: '200px',
+    backgroundColor: theme.palette.grey[200],
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+  },
+  selectPhotoButton: {
+    backgroundColor: theme.palette.grey[200]
+  }
 }));
 
 const ManageDietDetail = ({ action, diet, onSave, onCancel, onDelete }) => {
   const [detailTitle, setDetailTitle] = useState(diet.title);
   const [detailDesc, setDetailDesc] = useState(diet.description);
+  const [detailPhoto, setDetailPhoto] = useState(diet.photo);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [openPhotoSearch, setOpenPhotoSearch] = useState(false);
   const loading = useSelector((state) => state[dietName].loading);
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -32,7 +49,7 @@ const ManageDietDetail = ({ action, diet, onSave, onCancel, onDelete }) => {
 
   const saveDetails = () => {
     if (existingDiet) {
-      const updatedDiet = { ...diet, title: detailTitle, description: detailDesc };
+      const updatedDiet = { ...diet, title: detailTitle, description: detailDesc, photo: detailPhoto };
       dispatch(dietActions.updateDiet(updatedDiet));
     } else {
       dispatch(dietActions.saveDiet(detailTitle, detailDesc));
@@ -57,76 +74,106 @@ const ManageDietDetail = ({ action, diet, onSave, onCancel, onDelete }) => {
     if (onDelete) onDelete();
   };
 
+  const togglePhotoSearch = () => {
+    setOpenPhotoSearch(!openPhotoSearch);
+  };
+
+  const selectPhoto = (photo) => {
+    setDetailPhoto(photo);
+    togglePhotoSearch();
+  };
+
   return (
-    <Box>
-      <Typography variant="h5">{action} Diet</Typography>
-      <TextField
-        id="diet-title"
-        label="Title *"
-        margin="normal"
-        value={detailTitle}
-        onChange={(e) => setDetailTitle(e.target.value)}
-        onKeyDown={pressedEnter}
+    <>
+      <Dialog
+        open={openPhotoSearch}
+        onBackdropClick={togglePhotoSearch}
         fullWidth
-        autoFocus
-      />
-      <TextField
-        id="diet-desc"
-        label="Description *"
-        margin="normal"
-        value={detailDesc}
-        onChange={(e) => setDetailDesc(e.target.value)}
-        onKeyDown={pressedEnter}
-        fullWidth
-        multiline
-        rowsMax="4"
-      />
-      <Button
-        color="primary"
-        fullWidth
-        variant="contained"
-        className={classes.button}
-        onClick={saveDetails}
+        maxWidth="lg"
       >
-        {action} Diet {loading}
+        <DialogContent>
+          <PhotoSearch diet={diet} onSelect={selectPhoto} />
+        </DialogContent>
+      </Dialog>
+      <Box>
+        <Typography variant="h5">{action} Diet</Typography>
+        <div className={classes.image} style={detailPhoto && detailPhoto.imageUrl && { backgroundImage: `url(${detailPhoto.imageUrl})` }}>
+          <Button
+            color="primary"
+            onClick={togglePhotoSearch}
+            className={classes.selectPhotoButton}
+          >
+            select photo
+          </Button>
+        </div>
+        <TextField
+          id="diet-title"
+          label="Title *"
+          margin="normal"
+          value={detailTitle}
+          onChange={(e) => setDetailTitle(e.target.value)}
+          onKeyDown={pressedEnter}
+          fullWidth
+          autoFocus
+        />
+        <TextField
+          id="diet-desc"
+          label="Description *"
+          margin="normal"
+          value={detailDesc}
+          onChange={(e) => setDetailDesc(e.target.value)}
+          onKeyDown={pressedEnter}
+          fullWidth
+          multiline
+          rowsMax="4"
+        />
+        <Button
+          color="primary"
+          fullWidth
+          variant="contained"
+          className={classes.button}
+          onClick={saveDetails}
+        >
+          {action} Diet {loading}
+        </Button>
+        <Button
+          color="secondary"
+          fullWidth
+          onClick={cancel}
+        >
+          Cancel
       </Button>
-      <Button
-        color="secondary"
-        fullWidth
-        onClick={cancel}
-      >
-        Cancel
-      </Button>
-      {existingDiet &&
-        (
-          <>
-            <Button
-              color="secondary"
-              fullWidth
-              onClick={toggleDeleteConfirm}
-            >
-              Delete
-            </Button>
-            <Dialog open={showDeleteConfirm} onBackdropClick={toggleDeleteConfirm}>
-              <DialogContent>
-                <DialogContentText>
-                  Are you sure that you want to delete this diet? This diet along with all items
-                  within this diet will be permanently deleted. There is no undo option.
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={toggleDeleteConfirm} color="primary">
-                  No
-                </Button>
-                <Button onClick={deleteDiet} color="secondary">
-                  Yes
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </>
-        )
-      }
-    </Box>
+        {existingDiet &&
+          (
+            <>
+              <Button
+                color="secondary"
+                fullWidth
+                onClick={toggleDeleteConfirm}
+              >
+                Delete
+              </Button>
+              <Dialog open={showDeleteConfirm} onBackdropClick={toggleDeleteConfirm}>
+                <DialogContent>
+                  <DialogContentText>
+                    Are you sure that you want to delete this diet? This diet along with all items
+                    within this diet will be permanently deleted. There is no undo option.
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={toggleDeleteConfirm} color="primary">
+                    No
+                  </Button>
+                  <Button onClick={deleteDiet} color="secondary">
+                    Yes
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </>
+          )
+        }
+      </Box>
+    </>
   );
 };
 

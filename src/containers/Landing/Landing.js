@@ -37,7 +37,7 @@ const Landing = () => {
 
   useEffect(() => {
     myDietActions.loadDiets()(dispatch);
-  }, []);
+  }, [dispatch]);
 
   const toggleDietDetails = () => {
     setOpenDietDetails(!openDietDetails);

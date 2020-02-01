@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, makeStyles } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import CONFIG from 'config';
@@ -33,10 +33,17 @@ const MyDiet = ({ match }) => {
   const dispatch = useDispatch();
   const myDiet = useSelector((state) => state[dietName].diet);
   const loading = useSelector((state) => state[dietName].loading);
+  const [dietLoaded, setDietLoaded] = useState(false);
 
   useEffect(() => {
-    dietActions.getDiet(match.params.dietId)(dispatch);
-  }, []);
+    dispatch(dietActions.getDiet(match.params.dietId));
+  }, [dispatch, match]);
+
+  useEffect(() => {
+    if (!loading && !dietLoaded) {
+      setDietLoaded(true);
+    }
+  }, [loading, dietLoaded]);
 
   const addFood = (restrict) => {
     history.push(`${CONFIG.UI_URL.FOOD(myDiet._id)}?restriction=${restrict}`);
@@ -48,11 +55,11 @@ const MyDiet = ({ match }) => {
         container
         className={classes.root}
       >
-        <Grid item xs={0} sm={1} />
-        {loading &&
+        <Grid item xs={12} sm={1} />
+        {loading && !dietLoaded &&
           <div>LOADING...</div>
         }
-        {!loading &&
+        {(!loading || dietLoaded) &&
           (
             <Grid item xs={12} sm={10}>
               <DietCard diet={myDiet} showManage={false} showTotals={false} />
