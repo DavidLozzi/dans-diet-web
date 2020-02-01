@@ -25,14 +25,13 @@ const ManageFoodForm = ({ diet, food, onSave, onCancel, onDone }) => {
   const [addMore, setAddMore] = useState(true);
   const [searchText, setSearchText] = useState('a');
   const typeaheadOptions = useSelector((state) => state[groceriesName][searchText].options);
-  const typeaheadState = useSelector((state) => state[groceriesName][searchText].state);
 
   useEffect(() => {
-    if (food && diet.foods && food._id !== '' && food._id !== undefined) {
+    if (food && food._id !== '' && food._id !== undefined) {
       setAction(CONFIG.OPTIONS.EDIT);
-      setMyFood(diet.foods.filter((f) => f._id === food._id)[0]);
+      setMyFood({ ...food, dietId: diet._id });
     }
-  }, []);
+  }, [food, diet]);
 
   const clearForm = () => {
     setMyFood({ name: '', category: '', notes: '', restriction: food.restriction, dietId: diet._id });
@@ -58,6 +57,7 @@ const ManageFoodForm = ({ diet, food, onSave, onCancel, onDone }) => {
     if (text && text.length >= 2) {
       dispatch(groceriesActions.search(text));
       setSearchText(text);
+      setMyFood({ ...myFood, name: text });
     }
   }, 200);
 
@@ -67,23 +67,22 @@ const ManageFoodForm = ({ diet, food, onSave, onCancel, onDone }) => {
       className={classes.root}
     >
       <Grid item xs={12} md={6}>
-        <h3>{diet.title}: {action} Food {myFood.name} {myFood.category} </h3>
+        <h3>{diet.title}: {action} Food |{myFood.name}|{myFood.restriction}| </h3>
         <Autocomplete
           id="name"
-          onChange={(e, t) => t && setMyFood({ ...myFood, name: t.name, category: t.aisle.split(';')[0] })}
+          onChange={(e, t) => (t && setMyFood({ ...myFood, name: t.name, category: t.aisle.split(';')[0] }))}
           onInputChange={(e, text) => typeahead(text)}
           options={typeaheadOptions.sort((a, b) => b.aisle && -b.aisle.localeCompare(a.aisle))}
           groupBy={(option) => option.aisle && option.aisle.split(';')[0]}
-          getOptionLabel={(option) => option.name}
+          getOptionLabel={(option) => (typeof option === 'string' ? option : option.name)}
           noOptionsText="Enter your food..."
-          fullWidth
+          value={myFood.name}
           freeSolo
           autoComplete
           renderInput={(params) => (
             <TextField
               {...params}
               label="Name of Food or Beverage"
-              value={myFood.name}
               fullWidth
             />
           )}
@@ -109,7 +108,7 @@ const ManageFoodForm = ({ diet, food, onSave, onCancel, onDone }) => {
           <Select
             labelid="restriction-label"
             id="restriction"
-            value={myFood.restriction}
+            value={myFood.restriction ? myFood.restriction : ' '}
             onChange={(e) => setMyFood({ ...myFood, restriction: e.target.value })}
             fullWidth
           >

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, CardActions, CardContent, makeStyles, Typography } from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, CardMedia, makeStyles, Typography } from '@material-ui/core';
 import Icon from '@mdi/react';
 import { mdiBarleyOff } from '@mdi/js';
 import RestaurantOutlinedIcon from '@material-ui/icons/RestaurantOutlined';
@@ -15,6 +15,10 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       margin: theme.spacing()
     }
+  },
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
   },
   actionIconWrapper: {
     marginLeft: 'auto',
@@ -32,7 +36,13 @@ const useStyles = makeStyles((theme) => ({
   },
   iconCount: {
     color: theme.palette.grey[500],
-  }
+  },
+  photoCredit: {
+    textAlign: 'right',
+    marginTop: '-20px',
+    marginRight: theme.spacing(),
+    fontSize: '10px'
+  },
 }));
 
 
@@ -57,6 +67,16 @@ const DietCard = ({
 
   return (
     <Card title={diet.title} className={classes.card}>
+      {diet.photo && diet.photo.imageUrl &&
+        (
+          <>
+            <CardMedia image={diet.photo.imageUrl} className={classes.media} />
+            <div className={classes.photoCredit}>
+              <a href={diet.photo.sourceUrl} target="_blank" rel="noopener noreferrer" style={{color: diet.photo.color}}>Photo by {diet.photo.user.username}</a>
+            </div>
+          </>
+        )
+      }
       <CardContent>
         {!readOnly &&
           (
@@ -96,7 +116,7 @@ const DietCard = ({
                   <Icon path={mdiBarleyOff} size={1} className={classes.icons} />
                   <span className={classes.iconCount}>
                     :
-                    {diet.restricted || 0}
+                    {diet.foods ? diet.foods.filter((f) => f.restriction === CONFIG.RESTRICTIONS.RESTRICTED).length : 0}
                   </span>
                   <RestaurantOutlinedIcon color="primary" fontSize="small" className={classes.icons} />
                   <span className={classes.iconCount}>

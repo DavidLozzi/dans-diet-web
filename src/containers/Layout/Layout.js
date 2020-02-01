@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import TopNavBar from 'components/TopNavBar/TopNavBar';
-import BottomNav from 'components/BottomNav/BottomNav';
+// import BottomNav from 'components/BottomNav/BottomNav';
 import { Container, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,8 +23,8 @@ const Layout = ({ children, showTopNav, showBottomNav }) => {
         {children}
       </Container>
       {
-        showBottomNav &&
-        <BottomNav />
+        showBottomNav && <div />
+        // <BottomNav />
       }
     </div>
   );

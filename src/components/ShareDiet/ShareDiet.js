@@ -23,18 +23,18 @@ const ShareDiet = ({ diet, onShare, onUnshare, onClose }) => {
   const classes = useStyles();
 
 
-  const getShareUrl = () => `${window.location.origin}${CONFIG.UI_URL.VIEW(diet.shareId)}`;
+  const getShareUrl = `${window.location.origin}${CONFIG.UI_URL.VIEW(diet.shareId)}`;
 
   useEffect(() => {
     if (diet && diet.isShared) {
-      setShareUrl(getShareUrl());
+      setShareUrl(getShareUrl);
     }
-  }, [diet]);
+  }, [diet, getShareUrl]);
 
   useEffect(() => {
     // eslint-disable-next-line no-nested-ternary
-    setShareUrl(`${loading ? 'Loading...' : diet.isShared ? getShareUrl() : notSharedText}`);
-  }, [loading]);
+    setShareUrl(`${loading ? 'Loading...' : diet.isShared ? getShareUrl : notSharedText}`);
+  }, [loading, getShareUrl, diet]);
 
   const shareDiet = async () => {
     if (!diet.isShared) {

@@ -52,9 +52,9 @@
     "object-curly-newline": [
       "error",
       {
-        "ObjectExpression": "always",
+        "ObjectExpression": "never",
         "ObjectPattern": {
-          "multiline": false,
+          "multiline": true,
           "minProperties": 3
         },
         "ImportDeclaration": "never",

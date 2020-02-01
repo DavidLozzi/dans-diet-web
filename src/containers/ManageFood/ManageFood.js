@@ -5,7 +5,6 @@ import { makeStyles, Grid } from '@material-ui/core';
 import Layout from 'containers/Layout/Layout';
 import { actions as dietActions, name as dietName } from 'redux/api/myDiet/myDiet';
 import queryString from 'query-string';
-import CONFIG from 'config';
 import history from 'redux/history';
 import ManageFoodForm from 'components/ManageFoodForm/ManageFoodForm';
 
@@ -19,9 +18,10 @@ const ManageFood = ({ match, location }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const myDiet = useSelector((state) => state[dietName].diet);
-  const [food] = useState({
-    _id: queryString.parse(location.search).foodId,
-    restriction: queryString.parse(location.search).restriction,
+  const { foodId, restriction } = queryString.parse(location.search);
+  const [food, setFood] = useState({
+    _id: foodId,
+    restriction,
     name: '',
     category: '',
     notes: ''
@@ -29,9 +29,15 @@ const ManageFood = ({ match, location }) => {
 
   useEffect(() => {
     if (!myDiet || !myDiet.title) {
-      dietActions.getDiet(match.params.dietId)(dispatch);
+      dispatch(dietActions.getDiet(match.params.dietId));
     }
-  }, []);
+  }, [myDiet, match.params.dietId, dispatch]);
+
+  useEffect(() => {
+    if (myDiet && myDiet.foods) {
+      setFood(myDiet.foods.filter((f) => f._id === foodId)[0]);
+    }
+  }, [myDiet, foodId]);
 
   return (
     <Layout showTopNav showBottomNav>
