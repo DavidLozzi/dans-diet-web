@@ -22,11 +22,14 @@ const useStyles = makeStyles((theme) => ({
   },
   noDiets: {
     margin: theme.spacing(5)
+  },
+  addDietIcon: {
+    color: theme.palette.grey[700]
   }
 }));
 
 
-const Landing = () => {
+const MyDiets = () => {
   const dispatch = useDispatch();
   const myDiets = useSelector((state) => state[dietName].diets);
   const loading = useSelector((state) => state[dietName].loading);
@@ -51,22 +54,21 @@ const Landing = () => {
   };
 
   return (
-    <Layout showTopNav showBottomNav>
+    <Layout showTopNav showFooter>
       <Grid
         container
         className={classes.root}
       >
-        <Grid item xs={1} />
-        <Grid item xs={10}>
+        <Grid item xs={11}>
           <Typography
-            variant="h3"
+            variant="h1"
             gutterBottom
           >
             My Diets
           </Typography>
         </Grid>
         <Grid item xs={1} style={{ textAlign: 'right', alignContent: 'right' }}>
-          <AddCircleOutlineOutlinedIcon fontSize="large" onClick={toggleDietDetails} />
+          <AddCircleOutlineOutlinedIcon fontSize="large" onClick={toggleDietDetails} className={classes.addDietIcon} />
           <ManageDietDialog
             openDietDetails={openDietDetails}
             toggleDietDetails={toggleDietDetails}
@@ -92,4 +94,4 @@ const Landing = () => {
   );
 };
 
-export default Landing;
+export default MyDiets;
