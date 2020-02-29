@@ -17,7 +17,7 @@ const CONFIG = {
   ACCESS_TOKEN: 'dansdiet-token-storage',
   UI_URL: {
     HOME: '/',
-    LANDING: '/landing',
+    MY_DIETS: '/mydiets',
     MYDIET: '/mydiet',
     ERROR: (code) => `/error/${code}`,
     FOOD: (dietId) => `/mydiet/${dietId}/food`,

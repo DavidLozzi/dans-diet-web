@@ -22,7 +22,7 @@ const ErrorPage = () => {
   const classes = useStyles();
 
   return (
-    <Layout showTopNav showBottomNav>
+    <Layout showTopNav showFooter>
       <Grid
         container
         className={classes.root}

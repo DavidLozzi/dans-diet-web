@@ -40,7 +40,7 @@ const ManageFood = ({ match, location }) => {
   }, [myDiet, foodId]);
 
   return (
-    <Layout showTopNav showBottomNav>
+    <Layout showTopNav showFooter>
       <Grid
         container
         className={classes.root}

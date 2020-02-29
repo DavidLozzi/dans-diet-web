@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, CardActions, CardContent, CardMedia, makeStyles, Typography } from '@material-ui/core';
-import Icon from '@mdi/react';
-import { mdiBarleyOff } from '@mdi/js';
-import RestaurantOutlinedIcon from '@material-ui/icons/RestaurantOutlined';
+import { Button, Card, CardActions, CardContent, CardMedia, makeStyles, Typography, IconButton } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import history from 'redux/history';
 import CONFIG from 'config';
 import ShareDietDialog from 'components/ShareDietDialog/ShareDietDialog';
+import AllowedIcon from 'components/AllowedIcon/AllowedIcon';
+import RestrictedIcon from 'components/RestrictedIcon/RestrictedIcon';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -20,7 +19,8 @@ const useStyles = makeStyles((theme) => ({
     height: 0,
     paddingTop: '56.25%', // 16:9
   },
-  actionIconWrapper: {
+  foodCounts: {
+    float: 'right',
     marginLeft: 'auto',
     marginRight: theme.spacing(),
     display: 'flex',
@@ -28,7 +28,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center'
   },
   topIconWrapper: {
-    float: 'right'
+    float: 'right',
+    padding: 10,
+    marginTop: -10,
+    marginRight: -10
   },
   icons: {
     fill: theme.palette.grey[500],
@@ -72,7 +75,7 @@ const DietCard = ({
           <>
             <CardMedia image={diet.photo.imageUrl} className={classes.media} />
             <div className={classes.photoCredit}>
-              <a href={diet.photo.sourceUrl} target="_blank" rel="noopener noreferrer" style={{color: diet.photo.color}}>Photo by {diet.photo.user.username}</a>
+              <a href={diet.photo.sourceUrl} target="_blank" rel="noopener noreferrer" style={{ color: diet.photo.color }}>Photo by {diet.photo.user.username}</a>
             </div>
           </>
         )
@@ -80,9 +83,9 @@ const DietCard = ({
       <CardContent>
         {!readOnly &&
           (
-            <div className={classes.topIconWrapper}>
-              <EditIcon color="primary" fontSize="small" className={classes.icons} onClick={editDiet} />
-            </div>
+            <IconButton className={classes.topIconWrapper}>
+              <EditIcon fontSize="small" onClick={editDiet} />
+            </IconButton>
           )
         }
         <Typography variant="h5" gutterBottom component="h2">
@@ -112,18 +115,20 @@ const DietCard = ({
               )}
             {showTotals &&
               (
-                <div className={classes.actionIconWrapper}>
-                  <Icon path={mdiBarleyOff} size={1} className={classes.icons} />
-                  <span className={classes.iconCount}>
-                    :
-                    {diet.foods ? diet.foods.filter((f) => f.restriction === CONFIG.RESTRICTIONS.RESTRICTED).length : 0}
-                  </span>
-                  <RestaurantOutlinedIcon color="primary" fontSize="small" className={classes.icons} />
-                  <span className={classes.iconCount}>
-                    :
-                    {diet.allowed || 0}
-                  </span>
-                </div>
+                <>
+                  <div className={classes.foodCounts}>
+                    <RestrictedIcon className={classes.icons} />
+                    <span className={classes.iconCount}>
+                      {diet.foods ? diet.foods.filter((f) => f.restriction === CONFIG.RESTRICTIONS.RESTRICTED).length : 0} Restricted
+                    </span>
+                  </div>
+                  <div className={classes.foodCounts}>
+                    <AllowedIcon className={classes.icons} />
+                    <span className={classes.iconCount}>
+                      {diet.foods ? diet.foods.filter((f) => f.restriction === CONFIG.RESTRICTIONS.ALLOWED).length : 0} Allowed
+                    </span>
+                  </div>
+                </>
               )}
           </CardActions>
         )

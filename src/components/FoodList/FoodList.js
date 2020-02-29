@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import history from 'redux/history';
 import groupBy from 'lodash.groupby';
-import { makeStyles, Button, Collapse, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Dialog, DialogContent, DialogActions, DialogContentText } from '@material-ui/core';
+import { makeStyles, Button, Collapse, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Dialog, DialogContent, DialogActions, DialogContentText, Typography } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CONFIG from 'config';
@@ -15,21 +15,37 @@ const useStyles = makeStyles((theme) => ({
   listItem: {
     padding: 0
   },
+  categoryWrapper: {
+    // border: '1px solid',
+    // borderColor: theme.palette.primary.main,
+    // borderTop: 0,
+    marginBottom: theme.spacing(),
+    // borderRadius: '10px 10px 0px 0px'
+    backgroundColor: '#fff'
+  },
   category: {
-    backgroundColor: '#EEEEEE',
-    padding: theme.spacing(),
+    // backgroundColor: theme.palette.primary.main,
+    // color: theme.palette.getContrastText(theme.palette.primary.main),
+    padding: theme.spacing()
+    // borderRadius: '10px 10px 0px 0px'
+  },
+  categoryText: {
+    fontWeight: 700
   },
   list: {
-    borderBottom: `1px solid ${theme.palette.grey[400]}`
+    borderBottom: `1px solid ${theme.palette.grey[100]}`
   },
   icon: {
     marginLeft: theme.spacing()
+  },
+  editIcon: {
+    color: theme.palette.grey[400]
   }
 }));
 
 
 const FoodList = ({
-  foods, diet, onEdit, onDelete, readonly
+  foods, diet, onEdit, onDelete, readOnly
 }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -60,13 +76,11 @@ const FoodList = ({
           Object.keys(groupedFoods).map((key) => {
             const category = groupedFoods[key];
             return (
-              <div key={key}>
+              <div key={key} className={classes.categoryWrapper}>
                 <ListItem
                   className={classes.category}
                 >
-                  <ListItemText
-                    primary={key}
-                  />
+                  <Typography className={classes.categoryText}>{key}</Typography>
                 </ListItem>
                 <Collapse in>
                   <List component="div" disablePadding>
@@ -79,11 +93,11 @@ const FoodList = ({
                           primary={food.name}
                           secondary={food.notes}
                         />
-                        {!readonly &&
+                        {!readOnly &&
                           (
                             <ListItemSecondaryAction>
                               <IconButton edge="end" onClick={() => editFood(food._id)}>
-                                <EditIcon />
+                                <EditIcon className={classes.editIcon} />
                               </IconButton>
                               <IconButton
                                 edge="end"
@@ -138,14 +152,14 @@ FoodList.propTypes = {
   diet: PropTypes.shape().isRequired,
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
-  readonly: PropTypes.bool
+  readOnly: PropTypes.bool
 };
 
 FoodList.defaultProps = {
   foods: [],
   onEdit: null,
   onDelete: null,
-  readonly: false
+  readOnly: false
 };
 
 export default FoodList;

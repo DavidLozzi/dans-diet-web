@@ -7,9 +7,9 @@ import { ConnectedRouter } from 'connected-react-router';
 import CONFIG from 'config';
 import store from 'redux/store';
 import history from 'redux/history';
-import Login from 'components/Login/Login';
-import Landing from 'containers/Landing/Landing';
-import MyDiet from 'containers/MyDiet/MyDiet';
+import Home from 'containers/Home/Home';
+import MyDiets from 'containers/MyDiets/MyDiets';
+import MyDietContainer from 'containers/MyDiet/MyDiet';
 import ViewDiet from 'containers/ViewDiet/ViewDiet';
 import ManageFood from 'containers/ManageFood/ManageFood';
 import ErrorPage from 'containers/ErrorPage/ErrorPage';
@@ -28,10 +28,10 @@ function App() {
           <Switch>
             <Route path={`${CONFIG.UI_URL.VIEWDIET}/:shareId`} component={ViewDiet} />
             <Route path={`${CONFIG.UI_URL.VIEWDIET}`} component={ViewDiet} />
-            <Route exact path={CONFIG.UI_URL.HOME} component={Login} />
-            <Route path={CONFIG.UI_URL.LANDING} component={Landing} />
+            <Route exact path={CONFIG.UI_URL.HOME} component={Home} />
+            <Route path={CONFIG.UI_URL.MY_DIETS} component={MyDiets} />
             <Route path={`${CONFIG.UI_URL.MYDIET}/:dietId/food`} component={ManageFood} />
-            <Route path={`${CONFIG.UI_URL.MYDIET}/:dietId`} component={MyDiet} />
+            <Route path={`${CONFIG.UI_URL.MYDIET}/:dietId`} component={MyDietContainer} />
             <Route path="/error/404" component={ErrorPage} />
             <Redirect to={CONFIG.UI_URL.ERROR('404')} />
           </Switch>

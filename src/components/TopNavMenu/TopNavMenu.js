@@ -32,7 +32,7 @@ const TopNavMenu = ({
   const menu = [
     {
       label: 'My Diets',
-      url: CONFIG.UI_URL.LANDING
+      url: CONFIG.UI_URL.MY_DIETS
     },
     {
       label: 'View a Diet',
